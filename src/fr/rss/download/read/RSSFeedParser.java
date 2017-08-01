@@ -109,11 +109,8 @@ public class RSSFeedParser {
 					}
 				}
 			}
-		} catch (XMLStreamException e) {
+		} catch (XMLStreamException | IOException e) {
 			throw new RuntimeException(e);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		return feed;
 	}
