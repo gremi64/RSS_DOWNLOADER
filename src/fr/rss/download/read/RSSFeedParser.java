@@ -32,7 +32,8 @@ public class RSSFeedParser {
 		try {
 			this.url = new URL(feedUrl);
 			connection = this.url.openConnection();
-			connection.setRequestProperty("User-Agent", "");
+			connection.setRequestProperty("User-Agent",
+					"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.95 Safari/537.11");
 			connection.connect();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
