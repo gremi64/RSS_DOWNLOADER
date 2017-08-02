@@ -6,10 +6,22 @@ package fr.rss.download.model;
 public class FeedMessage {
 
 	String title;
-	String description;
 	String link;
-	String author;
-	String guid;
+	String description;
+	String category;
+	String pubDate;
+
+	public FeedMessage() {
+	}
+
+	public FeedMessage(String title, String link, String description, String category, String pubDate) {
+		super();
+		this.title = title;
+		this.link = link;
+		this.description = description;
+		this.category = category;
+		this.pubDate = pubDate;
+	}
 
 	public String getTitle() {
 		return title;
@@ -17,14 +29,6 @@ public class FeedMessage {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
 	}
 
 	public String getLink() {
@@ -35,26 +39,34 @@ public class FeedMessage {
 		this.link = link;
 	}
 
-	public String getAuthor() {
-		return author;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public String getGuid() {
-		return guid;
+	public String getCategory() {
+		return category;
 	}
 
-	public void setGuid(String guid) {
-		this.guid = guid;
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getPubDate() {
+		return pubDate;
+	}
+
+	public void setPubDate(String pubDate) {
+		this.pubDate = pubDate;
 	}
 
 	@Override
 	public String toString() {
-		return "FeedMessage [title=" + title + ", description=" + description + ", link=" + link + ", author=" + author
-				+ ", guid=" + guid + "]";
+		return "FeedMessage [title=" + title + ", link=" + link + ", description=" + description + ", category="
+				+ category + ", pubDate=" + pubDate + "]";
 	}
 
 }
