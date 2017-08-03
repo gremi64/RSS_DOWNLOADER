@@ -14,10 +14,14 @@ public class ReadRSS {
 
 	private static final String PATTERN_QUALITE_LANGAGE_EPISODE_SAISON = ".*? Qualité (.*?) \\| (.*?)  Episode (\\d+) \\| Saison (\\d+) ";
 	private static List<String> listTVShow = new ArrayList<String>();
+	private static String myQuality = "HDTV";
+	// private static String myQuality = "HD720P";
+	private static String myLangage = "VOSTFR";
 
 	public static void main(String[] args) throws Exception {
 
 		listTVShow.add("In the Dark");
+		listTVShow.add("Snowfall");
 		listTVShow.add("Will");
 
 		for (int i = 1; i <= 1; i++) {
@@ -39,10 +43,10 @@ public class ReadRSS {
 
 				List<FeedMessage> listFeedMessage = new ArrayList<FeedMessage>();
 
-				for (FeedMessage message : feed.getMessages()) {
-					System.out.println(message);
-					if (isItInMyTVShowList(message.getTitle())) {
-						listFeedMessage.add(message);
+				for (FeedMessage feedMessage : feed.getMessages()) {
+					System.out.println(feedMessage);
+					if (isItInMyTVShowList(feedMessage.getTitle())) {
+						listFeedMessage.add(feedMessage);
 					}
 				}
 
@@ -50,7 +54,13 @@ public class ReadRSS {
 				System.out.println("-------------TRI----------------");
 				System.out.println("--------------------------------");
 
-				List<FeedMessageEpisode> listEpisode = getFullEpisodes(listFeedMessage);
+				List<FeedMessageEpisode> listEpisodes = getFullEpisodesOnly(listFeedMessage);
+
+				listEpisodes = getMyLangageAndQuality(listEpisodes);
+
+				for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
+					System.out.println(feedMessageEpisode);
+				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -59,33 +69,32 @@ public class ReadRSS {
 
 	}
 
-	public static List<FeedMessageEpisode> getFullEpisodes(List<FeedMessage> listFeedMessage) {
+	private static List<FeedMessageEpisode> getMyLangageAndQuality(List<FeedMessageEpisode> listEpisodes) {
+		ArrayList<FeedMessageEpisode> myListEpisodes = new ArrayList<FeedMessageEpisode>();
+		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
+			if (myLangage.equals(feedMessageEpisode.getLangage())
+					&& myQuality.equals(feedMessageEpisode.getQuality())) {
+				myListEpisodes.add(feedMessageEpisode);
+			}
+		}
+		return myListEpisodes;
+	}
+
+	public static List<FeedMessageEpisode> getFullEpisodesOnly(List<FeedMessage> listFeedMessage) {
 		List<FeedMessageEpisode> listEpisode = new ArrayList<>();
 
 		for (FeedMessage feedMessage : listFeedMessage) {
-			// System.out.println(feedMessage);
-
 			String line = feedMessage.getDescription();
 			Pattern pattern = Pattern.compile(PATTERN_QUALITE_LANGAGE_EPISODE_SAISON);
 			Matcher matcher = pattern.matcher(line);
 			if (matcher.find()) {
-				// System.out.println("Title : " + feedMessage.getTitle());
-				// System.out.println("Qualité : " + matcher.group(1));
-				// System.out.println("Langue : " + matcher.group(2));
-				// System.out.println("Episode : " + matcher.group(3));
-				// System.out.println("Saison : " + matcher.group(4));
-
 				FeedMessageEpisode feedMessageEpisode = new FeedMessageEpisode(feedMessage);
-				feedMessageEpisode.setQuality(matcher.group(1));
-				feedMessageEpisode.setLangage(matcher.group(2));
-				feedMessageEpisode.setSaison(matcher.group(4));
-				feedMessageEpisode.setEpisode(matcher.group(3));
-
-				System.out.println(feedMessageEpisode);
-
+				feedMessageEpisode.setQuality(matcher.group(1).toUpperCase().trim().replace(" ", ""));
+				feedMessageEpisode.setLangage(matcher.group(2).toUpperCase().trim().replace(" ", ""));
+				feedMessageEpisode.setSaison(matcher.group(4).toUpperCase().trim().replace(" ", ""));
+				feedMessageEpisode.setEpisode(matcher.group(3).toUpperCase().trim().replace(" ", ""));
 				listEpisode.add(feedMessageEpisode);
 			}
-
 		}
 		return listEpisode;
 	}
