@@ -9,6 +9,7 @@ import fr.rss.download.model.Feed;
 import fr.rss.download.model.FeedMessage;
 import fr.rss.download.model.FeedMessageEpisode;
 import fr.rss.download.read.RSSFeedParser;
+import fr.rss.download.read.TvShowHtmlParser;
 
 public class ReadRSS {
 
@@ -61,6 +62,7 @@ public class ReadRSS {
 
 		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
 			System.out.println(feedMessageEpisode);
+			TvShowHtmlParser tvShowHtmlParser = new TvShowHtmlParser(feedMessageEpisode.getLink());
 		}
 
 	}
