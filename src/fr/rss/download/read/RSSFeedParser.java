@@ -48,86 +48,86 @@ public class RSSFeedParser {
 		}
 	}
 
-	public Feed readFeed() throws XMLStreamException, IOException {
+	public Feed readFeed() {
 		Feed feed = null;
-		// try {
-		boolean isFeedHeader = true;
-		// Set header values initial to the empty string
-		String description = "";
-		String title = "";
-		String link = "";
-		String language = "";
-		String category = "";
-		String pubDate = "";
+		try {
+			boolean isFeedHeader = true;
+			// Set header values initial to the empty string
+			String description = "";
+			String title = "";
+			String link = "";
+			String language = "";
+			String category = "";
+			String pubDate = "";
 
-		// First create a new XMLInputFactory
-		XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		inputFactory.setXMLReporter(new XMLReporter() {
-			@Override
-			public void report(String message, String typeErreur, Object source, Location location)
-					throws XMLStreamException {
-				System.out.println("Erreur de type : " + typeErreur + ", message : " + message);
-			}
-		});
+			// First create a new XMLInputFactory
+			XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+			inputFactory.setXMLReporter(new XMLReporter() {
+				@Override
+				public void report(String message, String typeErreur, Object source, Location location)
+						throws XMLStreamException {
+					System.out.println("Erreur de type : " + typeErreur + ", message : " + message);
+				}
+			});
 
-		String dirtyRssXml = IOUtils.toString(connection.getInputStream(), "UTF-8");
-		String start = "<?xml";
-		String goodRssXml = dirtyRssXml.substring(dirtyRssXml.indexOf(start));
-		InputStream inputStreamGoodRssXml = new ByteArrayInputStream(goodRssXml.getBytes(StandardCharsets.UTF_8));
+			String dirtyRssXml = IOUtils.toString(connection.getInputStream(), "UTF-8");
+			String start = "<?xml";
+			String goodRssXml = dirtyRssXml.substring(dirtyRssXml.indexOf(start));
+			InputStream inputStreamGoodRssXml = new ByteArrayInputStream(goodRssXml.getBytes(StandardCharsets.UTF_8));
 
-		// Setup a new eventReader
-		XMLEventReader eventReader = inputFactory.createXMLEventReader(inputStreamGoodRssXml);
+			// Setup a new eventReader
+			XMLEventReader eventReader = inputFactory.createXMLEventReader(inputStreamGoodRssXml);
 
-		// read the XML document
-		while (eventReader.hasNext()) {
-			XMLEvent event = eventReader.nextEvent();
-			if (event.isStartElement()) {
-				String localPart = event.asStartElement().getName().getLocalPart();
-				switch (localPart) {
-				case ITEM:
-					if (isFeedHeader) {
-						isFeedHeader = false;
-						feed = new Feed(title, link, language, description);
+			// read the XML document
+			while (eventReader.hasNext()) {
+				XMLEvent event = eventReader.nextEvent();
+				if (event.isStartElement()) {
+					String localPart = event.asStartElement().getName().getLocalPart();
+					switch (localPart) {
+					case ITEM:
+						if (isFeedHeader) {
+							isFeedHeader = false;
+							feed = new Feed(title, link, language, description);
+						}
+						event = eventReader.nextEvent();
+						break;
+					case TITLE:
+						title = getCharacterData(event, eventReader);
+						break;
+					case DESCRIPTION:
+						description = getCharacterData(event, eventReader);
+						break;
+					case LINK:
+						link = getCharacterData(event, eventReader);
+						break;
+					case LANGUAGE:
+						language = getCharacterData(event, eventReader);
+						break;
+					case CATEGORY:
+						category = getCharacterData(event, eventReader);
+						break;
+					case PUB_DATE:
+						pubDate = getCharacterData(event, eventReader);
+						break;
 					}
-					event = eventReader.nextEvent();
-					break;
-				case TITLE:
-					title = getCharacterData(event, eventReader);
-					break;
-				case DESCRIPTION:
-					description = getCharacterData(event, eventReader);
-					break;
-				case LINK:
-					link = getCharacterData(event, eventReader);
-					break;
-				case LANGUAGE:
-					language = getCharacterData(event, eventReader);
-					break;
-				case CATEGORY:
-					category = getCharacterData(event, eventReader);
-					break;
-				case PUB_DATE:
-					pubDate = getCharacterData(event, eventReader);
-					break;
+				} else if (event.isEndElement()) {
+					if (event.asEndElement().getName().getLocalPart() == (ITEM)) {
+						FeedMessage message = new FeedMessage();
+						message.setCategory(category);
+						message.setDescription(description);
+						message.setLink(link);
+						message.setTitle(title);
+						message.setPubDate(pubDate);
+						feed.getMessages().add(message);
+						event = eventReader.nextEvent();
+						continue;
+					}
 				}
-			} else if (event.isEndElement()) {
-				if (event.asEndElement().getName().getLocalPart() == (ITEM)) {
-					FeedMessage message = new FeedMessage();
-					message.setCategory(category);
-					message.setDescription(description);
-					message.setLink(link);
-					message.setTitle(title);
-					message.setPubDate(pubDate);
-					feed.getMessages().add(message);
-					event = eventReader.nextEvent();
-					continue;
-				}
-			}
 
+			}
+		} catch (XMLStreamException | IOException e) {
+			throw new RuntimeException(e);
 		}
-		// } catch (IOException e) {
-		// throw new RuntimeException(e);
-		// }
 		return feed;
 	}
 

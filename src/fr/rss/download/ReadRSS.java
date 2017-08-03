@@ -23,49 +23,44 @@ public class ReadRSS {
 		listTVShow.add("In the Dark");
 		listTVShow.add("Snowfall");
 		listTVShow.add("The Fosters");
+		listTVShow.add("Flash (2014)");
+		listTVShow.add("Killjoys");
 		listTVShow.add("Will");
 
-		for (int i = 1; i <= 1; i++) {
-			try {
-				String urlHost = "www.zone-telechargement.ws";
-				String urlRss = "http://" + urlHost + "/telecharger-series/rss.xml";
+		String urlHost = "www.zone-telechargement.ws";
+		String urlRss = "http://" + urlHost + "/telecharger-series/rss.xml";
 
-				RSSFeedParser parser = new RSSFeedParser(urlHost, urlRss);
-				Feed feed = parser.readFeed();
+		RSSFeedParser parser = new RSSFeedParser(urlHost, urlRss);
+		Feed feed = parser.readFeed();
 
-				System.out.println(feed);
-				if (feed == null) {
-					throw new Exception("Feed null, impossible de continuer");
-				}
+		System.out.println(feed);
+		if (feed == null) {
+			throw new Exception("Feed null, impossible de continuer");
+		}
 
-				if (feed.getMessages() == null) {
-					throw new Exception("Le feed ne contient aucun message, impossible de continuer");
-				}
+		if (feed.getMessages() == null) {
+			throw new Exception("Le feed ne contient aucun message, impossible de continuer");
+		}
 
-				List<FeedMessage> listFeedMessage = new ArrayList<FeedMessage>();
+		List<FeedMessage> listFeedMessage = new ArrayList<FeedMessage>();
 
-				for (FeedMessage feedMessage : feed.getMessages()) {
-					System.out.println(feedMessage);
-					if (isItInMyTVShowList(feedMessage.getTitle())) {
-						listFeedMessage.add(feedMessage);
-					}
-				}
-
-				System.out.println("--------------------------------");
-				System.out.println("-------------TRI----------------");
-				System.out.println("--------------------------------");
-
-				List<FeedMessageEpisode> listEpisodes = getFullEpisodesOnly(listFeedMessage);
-
-				listEpisodes = getMyLangageAndQuality(listEpisodes);
-
-				for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
-					System.out.println(feedMessageEpisode);
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
+		for (FeedMessage feedMessage : feed.getMessages()) {
+			System.out.println(feedMessage);
+			if (isItInMyTVShowList(feedMessage.getTitle())) {
+				listFeedMessage.add(feedMessage);
 			}
+		}
+
+		System.out.println("--------------------------------");
+		System.out.println("-------------TRI----------------");
+		System.out.println("--------------------------------");
+
+		List<FeedMessageEpisode> listEpisodes = getFullEpisodesOnly(listFeedMessage);
+
+		listEpisodes = getMyLangageAndQuality(listEpisodes);
+
+		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
+			System.out.println(feedMessageEpisode);
 		}
 
 	}
