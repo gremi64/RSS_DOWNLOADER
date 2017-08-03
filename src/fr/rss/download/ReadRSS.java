@@ -17,7 +17,8 @@ public class ReadRSS {
 	private static List<String> listTVShow = new ArrayList<String>();
 	private static String myQuality = "HDTV";
 	// private static String myQuality = "HD720P";
-	private static String myLangage = "VOSTFR";
+	// private static String myLangage = "VOSTFR";
+	private static String myLangage = "FRENCH";
 
 	public static void main(String[] args) throws Exception {
 
@@ -26,6 +27,7 @@ public class ReadRSS {
 		listTVShow.add("The Fosters");
 		listTVShow.add("Flash (2014)");
 		listTVShow.add("Killjoys");
+		listTVShow.add("Demain nous appartient");
 		listTVShow.add("Will");
 
 		String urlHost = "www.zone-telechargement.ws";

@@ -29,7 +29,7 @@ public class Fournisseur {
 
 	@Override
 	public String toString() {
-		return "Fournisseur [name=" + name + ", episodes=" + episodes + "]";
+		return "Fournisseur [" + name + ", " + episodes + "]";
 	}
 
 }

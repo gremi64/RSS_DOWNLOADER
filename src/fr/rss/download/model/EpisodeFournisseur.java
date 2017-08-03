@@ -22,6 +22,6 @@ public class EpisodeFournisseur {
 
 	@Override
 	public String toString() {
-		return "EpisodeFournisseur [name=" + name + ", url=" + url + "]";
+		return "Episode [" + name + ", " + url + "]";
 	}
 }
