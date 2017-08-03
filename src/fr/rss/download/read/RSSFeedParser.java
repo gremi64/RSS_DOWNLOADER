@@ -1,9 +1,11 @@
 package fr.rss.download.read;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLEventReader;
@@ -12,6 +14,8 @@ import javax.xml.stream.XMLReporter;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.XMLEvent;
+
+import org.apache.commons.io.IOUtils;
 
 import fr.rss.download.model.Feed;
 import fr.rss.download.model.FeedMessage;
@@ -66,10 +70,13 @@ public class RSSFeedParser {
 			}
 		});
 
-		InputStream is = connection.getInputStream();
+		String dirtyRssXml = IOUtils.toString(connection.getInputStream(), "UTF-8");
+		String start = "<?xml";
+		String goodRssXml = dirtyRssXml.substring(dirtyRssXml.indexOf(start));
+		InputStream inputStreamGoodRssXml = new ByteArrayInputStream(goodRssXml.getBytes(StandardCharsets.UTF_8));
 
 		// Setup a new eventReader
-		XMLEventReader eventReader = inputFactory.createXMLEventReader(connection.getInputStream());
+		XMLEventReader eventReader = inputFactory.createXMLEventReader(inputStreamGoodRssXml);
 
 		// read the XML document
 		while (eventReader.hasNext()) {

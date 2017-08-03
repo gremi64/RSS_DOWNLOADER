@@ -22,6 +22,7 @@ public class ReadRSS {
 
 		listTVShow.add("In the Dark");
 		listTVShow.add("Snowfall");
+		listTVShow.add("The Fosters");
 		listTVShow.add("Will");
 
 		for (int i = 1; i <= 1; i++) {
