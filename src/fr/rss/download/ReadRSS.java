@@ -17,11 +17,12 @@ public class ReadRSS {
 	private static List<String> listTVShow = new ArrayList<String>();
 	private static String myQuality = "HDTV";
 	// private static String myQuality = "HD720P";
-	// private static String myLangage = "VOSTFR";
-	private static String myLangage = "FRENCH";
+	private static String myLangage = "VOSTFR";
+	// private static String myLangage = "FRENCH";
 
 	public static void main(String[] args) throws Exception {
 
+		listTVShow.add("Game of Thrones");
 		listTVShow.add("In the Dark");
 		listTVShow.add("Snowfall");
 		listTVShow.add("The Fosters");
