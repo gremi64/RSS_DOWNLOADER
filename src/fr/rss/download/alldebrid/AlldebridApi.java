@@ -14,6 +14,7 @@ import org.json.JSONObject;
 public class AlldebridApi {
 
 	static final String URL_CONNEXION = "https://alldebrid.com/api.php";
+	static final String URL_UNRESTRAIN = "https://alldebrid.com/service.php?link=thedownloadlink&json=true&jd=true";
 
 	String login;
 	String mdp;
@@ -71,17 +72,29 @@ public class AlldebridApi {
 		this.login = login;
 		this.mdp = mdp;
 
-		URIBuilder ub = new URIBuilder(URL_CONNEXION);
+	}
 
+	public String unrestrainLink(String url) throws URISyntaxException {
+		String unrestrainLink = null;
+
+		URIBuilder ub = new URIBuilder(URL_UNRESTRAIN);
+		ub.addParameter("link", url);
+		ub.addParameter("json", "true");
+		ub.addParameter("jd", "true");
+		urlConnexion = ub.toString();
+
+		return unrestrainLink;
+	}
+
+	public void login() throws Exception {
+
+		URIBuilder ub = new URIBuilder(URL_CONNEXION);
 		ub.addParameter("action", "info_user");
 		ub.addParameter("login", login);
 		ub.addParameter("pw", mdp);
 		ub.addParameter("format", "json");
 		urlConnexion = ub.toString();
 
-	}
-
-	public void login() throws Exception {
 		URL url = new URL(urlConnexion);
 		URLConnection connection = url.openConnection();
 
@@ -98,6 +111,8 @@ public class AlldebridApi {
 			// Login : OK
 			JSONObject obj = new JSONObject(response);
 			cookie = obj.getString("cookie");
+
+			System.out.println("Login OK");
 		}
 	}
 
