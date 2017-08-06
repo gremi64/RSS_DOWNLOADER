@@ -1,0 +1,17 @@
+{"properties": [
+  {
+    "name": "alldebrid.pwd",
+    "type": "java.lang.String",
+    "description": "Password of allDebrid account"
+  },
+  {
+    "name": "alldebrid.login",
+    "type": "java.lang.String",
+    "description": "Login of allDebrid account"
+  },
+  {
+    "name": "alldebrid.download.location",
+    "type": "java.lang.String",
+    "description": "File download location"
+  }
+]}

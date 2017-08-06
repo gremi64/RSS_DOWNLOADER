@@ -1,0 +1,14 @@
+springfox.documentation.swagger.v2.path=/api-docs
+server.contextPath=/v1
+server.port=8080
+spring.jackson.date-format=io.swagger.RFC3339DateFormat
+spring.jackson.serialization.WRITE_DATES_AS_TIMESTAMPS=false
+
+#logging
+logging.level.org.springframework.web=DEBUG
+logging.level.org.hibernate=ERROR
+
+# AllDebrid Account
+alldebrid.login=myWonder_full_login
+alldebrid.pwd=mYPa$$w0rd
+alldebrid.download.location=\\\\C:\\Downloads

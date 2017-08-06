@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.rss.download.model.Feed;
 import fr.rss.download.model.FeedMessage;
 import fr.rss.download.model.FeedMessageEpisode;
@@ -13,7 +16,9 @@ import fr.rss.download.read.TvShowHtmlParser;
 
 public class ReadRSS {
 
-	private static final String PATTERN_QUALITE_LANGAGE_EPISODE_SAISON = ".*? Qualité (.*?) \\| (.*?)  Episode (\\d+) \\| Saison (\\d+) ";
+	private static final Logger log = LoggerFactory.getLogger(ReadRSS.class);
+
+	private static final String PATTERN_QUALITE_LANGAGE_EPISODE_SAISON = ".*? Qualitï¿½ (.*?) \\| (.*?)  Episode (\\d+) \\| Saison (\\d+) ";
 	private static List<String> listTVShow = new ArrayList<String>();
 	private static String myQuality = "HDTV";
 	// private static String myQuality = "HD720P";
@@ -37,10 +42,11 @@ public class ReadRSS {
 		RSSFeedParser parser = new RSSFeedParser(urlHost, urlRss);
 		Feed feed = parser.readFeed();
 
-		System.out.println(feed);
 		if (feed == null) {
 			throw new Exception("Feed null, impossible de continuer");
 		}
+
+		log.debug(feed.toString());
 
 		if (feed.getMessages() == null) {
 			throw new Exception("Le feed ne contient aucun message, impossible de continuer");
@@ -49,22 +55,22 @@ public class ReadRSS {
 		List<FeedMessage> listFeedMessage = new ArrayList<FeedMessage>();
 
 		for (FeedMessage feedMessage : feed.getMessages()) {
-			System.out.println(feedMessage);
+			log.debug(feedMessage.toString());
 			if (isItInMyTVShowList(feedMessage.getTitle())) {
 				listFeedMessage.add(feedMessage);
 			}
 		}
 
-		System.out.println("--------------------------------");
-		System.out.println("-------------TRI----------------");
-		System.out.println("--------------------------------");
+		log.debug("--------------------------------");
+		log.debug("-------------TRI----------------");
+		log.debug("--------------------------------");
 
 		List<FeedMessageEpisode> listEpisodes = getFullEpisodesOnly(listFeedMessage);
 
 		listEpisodes = getMyLangageAndQuality(listEpisodes);
 
 		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
-			System.out.println(feedMessageEpisode);
+			log.debug(feedMessageEpisode.toString());
 			TvShowHtmlParser tvShowHtmlParser = new TvShowHtmlParser(feedMessageEpisode.getLink());
 		}
 
@@ -73,8 +79,7 @@ public class ReadRSS {
 	private static List<FeedMessageEpisode> getMyLangageAndQuality(List<FeedMessageEpisode> listEpisodes) {
 		ArrayList<FeedMessageEpisode> myListEpisodes = new ArrayList<FeedMessageEpisode>();
 		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
-			if (myLangage.equals(feedMessageEpisode.getLangage())
-					&& myQuality.equals(feedMessageEpisode.getQuality())) {
+			if (myLangage.equals(feedMessageEpisode.getLangage()) && myQuality.equals(feedMessageEpisode.getQuality())) {
 				myListEpisodes.add(feedMessageEpisode);
 			}
 		}
