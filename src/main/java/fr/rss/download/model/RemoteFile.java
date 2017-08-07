@@ -2,13 +2,10 @@ package fr.rss.download.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class AlldebridLink {
+public class RemoteFile {
 
 	@JsonProperty("link")
 	String link;
-
-	@JsonProperty("unrestrained_link")
-	String unrestrainedLink;
 
 	@JsonProperty("file_name")
 	String fileName;
@@ -16,20 +13,15 @@ public class AlldebridLink {
 	@JsonProperty("file_size")
 	String fileSize;
 
+	@JsonProperty("file_location")
+	String fileLocation;
+
 	public String getLink() {
 		return link;
 	}
 
 	public void setLink(String link) {
 		this.link = link;
-	}
-
-	public String getUnrestrainedLink() {
-		return unrestrainedLink;
-	}
-
-	public void setUnrestrainedLink(String unrestrainedLink) {
-		this.unrestrainedLink = unrestrainedLink;
 	}
 
 	public String getFileName() {
@@ -48,9 +40,17 @@ public class AlldebridLink {
 		this.fileSize = fileSize;
 	}
 
+	public String getFileLocation() {
+		return fileLocation;
+	}
+
+	public void setFileLocation(String fileLocation) {
+		this.fileLocation = fileLocation;
+	}
+
 	@Override
 	public String toString() {
-		return "AlldebridLink [link=" + link + ", unrestrainedLink=" + unrestrainedLink + ", fileName=" + fileName + ", fileSize=" + fileSize + "]";
+		return "RemoteFile [link=" + link + ", fileName=" + fileName + ", fileSize=" + fileSize + ", fileLocation=" + fileLocation + "]";
 	}
 
 }

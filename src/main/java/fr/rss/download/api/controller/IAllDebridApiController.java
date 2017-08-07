@@ -6,12 +6,12 @@
 package fr.rss.download.api.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.rss.download.api.exceptions.ApiException;
-import fr.rss.download.model.AlldebridLink;
+import fr.rss.download.model.AlldebridRemoteFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -21,18 +21,11 @@ import io.swagger.annotations.ApiResponses;
 @Api(value = "allDebrid")
 public interface IAllDebridApiController {
 
-	@ApiOperation(value = "Recupere un lien débridé depuis allDebrid", response = AlldebridLink.class, tags = { "allDebrid" })
-	@ApiResponses(value = { @ApiResponse(code = 200, message = "Debridage ok", response = AlldebridLink.class),
+	@ApiOperation(value = "Recupere un lien débridé depuis allDebrid", response = AlldebridRemoteFile.class, tags = { "allDebrid" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Debridage ok", response = AlldebridRemoteFile.class),
 			@ApiResponse(code = 500, message = "Erreur lors du traitement", response = ApiException.class) })
 
 	@RequestMapping(value = "/allDebrid", produces = { "application/json" }, method = RequestMethod.GET)
-	ResponseEntity<?> debridLink(@ApiParam(value = "Lien à débrider", required = true) @PathVariable("link") String link) throws ApiException;
-
-	//	@ApiOperation(value = "Find pet by ID", notes = "Returns a single pet", response = Void.class, tags = { "pet" })
-	//	@ApiResponses(value = { @ApiResponse(code = 200, message = "successful operation", response = Void.class), @ApiResponse(code = 400, message = "Invalid ID supplied", response = Void.class),
-	//			@ApiResponse(code = 404, message = "Pet not found", response = Void.class) })
-	//
-	//	@RequestMapping(value = "/pet/{petId}", produces = { "application/xml", "application/json" }, method = RequestMethod.GET)
-	//	ResponseEntity<Void> getPetById(@ApiParam(value = "ID of pet to return", required = true) @PathVariable("petId") Long petId);
+	ResponseEntity<?> allDebridDownload(@ApiParam(value = "Lien à débrider", required = true) @RequestParam("link") String link) throws ApiException;
 
 }

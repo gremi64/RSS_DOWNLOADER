@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @SpringBootApplication
 public class CompletableFuturesRestApplication {
+
+	//	public static void main(String[] args) {
+	//		SpringApplication.run(CompletableFuturesRestApplication.class, args);
+	//	}
 
 	// Exercise using curl
 	// http://localhost:8080/async?input=lorem,ipsum,dolor,sit,amet
@@ -66,7 +69,4 @@ public class CompletableFuturesRestApplication {
 		return str.toUpperCase();
 	}
 
-	public static void main(String[] args) {
-		SpringApplication.run(CompletableFuturesRestApplication.class, args);
-	}
 }
