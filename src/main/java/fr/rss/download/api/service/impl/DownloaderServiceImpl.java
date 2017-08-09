@@ -21,15 +21,15 @@ import fr.rss.download.model.RemoteFile;
 @Service
 public class DownloaderServiceImpl implements IDownloaderService {
 
-	private static final String WINDOWS_SEPARATOR = "\\";
+	private static final String SEPARATOR = "\\";
 
 	private static final Logger log = LoggerFactory.getLogger(DownloaderServiceImpl.class);
 
 	private String downloadLocation;
 
 	public DownloaderServiceImpl(@Value("${alldebrid.download.location}") String downloadLocation) {
-		if (!downloadLocation.endsWith(WINDOWS_SEPARATOR)) {
-			downloadLocation = downloadLocation + WINDOWS_SEPARATOR;
+		if (!downloadLocation.endsWith(SEPARATOR)) {
+			downloadLocation = downloadLocation + SEPARATOR;
 		}
 		this.downloadLocation = downloadLocation;
 	}
@@ -88,8 +88,8 @@ public class DownloaderServiceImpl implements IDownloaderService {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Futur emplacement du fichier à télécharger null, impossible de lancer le téléchargement");
 		}
 
-		if (!location.endsWith(WINDOWS_SEPARATOR)) {
-			location = location + WINDOWS_SEPARATOR;
+		if (!location.endsWith(SEPARATOR)) {
+			location = location + SEPARATOR;
 		}
 
 		try {

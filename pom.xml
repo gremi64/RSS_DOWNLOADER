@@ -93,6 +93,11 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<executable>true</executable>
+					<outputDirectory>./install</outputDirectory>
+					<finalName>RSS_DOWNLOADER</finalName>
+				</configuration>
 				<executions>
 					<execution>
 						<goals>
