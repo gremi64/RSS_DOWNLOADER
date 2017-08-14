@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 
 import fr.rss.download.api.constantes.Const;
 import fr.rss.download.api.exceptions.ApiException;
+import fr.rss.download.api.model.AlldebridRemoteFile;
+import fr.rss.download.api.model.RemoteFile;
 import fr.rss.download.api.service.IDownloaderService;
-import fr.rss.download.model.AlldebridRemoteFile;
-import fr.rss.download.model.RemoteFile;
 
 @Service
 public class DownloaderServiceImpl implements IDownloaderService {

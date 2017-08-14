@@ -1,6 +1,6 @@
-package fr.rss.download.model;
+package fr.rss.download.api.model;
 
-public class EpisodeFournisseur {
+public class EpisodeHebergeur {
 	String name;
 	String url;
 

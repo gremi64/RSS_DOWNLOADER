@@ -8,17 +8,16 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.rss.download.model.Feed;
-import fr.rss.download.model.FeedMessage;
-import fr.rss.download.model.FeedMessageEpisode;
+import fr.rss.download.api.model.zt.fluxrss.Feed;
+import fr.rss.download.api.model.zt.fluxrss.FeedMessage;
+import fr.rss.download.api.model.zt.fluxrss.FeedMessageEpisode;
 import fr.rss.download.read.RSSFeedParser;
-import fr.rss.download.read.TvShowHtmlParser;
 
 public class ReadRSS {
 
 	private static final Logger log = LoggerFactory.getLogger(ReadRSS.class);
 
-	private static final String PATTERN_QUALITE_LANGAGE_EPISODE_SAISON = ".*? Qualit� (.*?) \\| (.*?)  Episode (\\d+) \\| Saison (\\d+) ";
+	private static final String PATTERN_QUALITE_LANGAGE_EPISODE_SAISON = ".*? Qualité (.*?) \\| (.*?)  Episode (\\d+) \\| Saison (\\d+) ";
 	private static List<String> listTVShow = new ArrayList<String>();
 	private static String myQuality = "HDTV";
 	// private static String myQuality = "HD720P";
@@ -61,9 +60,7 @@ public class ReadRSS {
 			}
 		}
 
-		log.debug("--------------------------------");
-		log.debug("-------------TRI----------------");
-		log.debug("--------------------------------");
+		log.debug("--------------------------------" + "\n" + "-------------TRI----------------" + "\n" + "--------------------------------");
 
 		List<FeedMessageEpisode> listEpisodes = getFullEpisodesOnly(listFeedMessage);
 
@@ -71,7 +68,7 @@ public class ReadRSS {
 
 		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
 			log.debug(feedMessageEpisode.toString());
-			TvShowHtmlParser tvShowHtmlParser = new TvShowHtmlParser(feedMessageEpisode.getLink());
+			//			TvShowHtmlParser tvShowHtmlParser = new TvShowHtmlParser(feedMessageEpisode.getLink());
 		}
 
 	}

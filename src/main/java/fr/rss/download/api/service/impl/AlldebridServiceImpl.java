@@ -18,9 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import fr.rss.download.api.exceptions.ApiException;
+import fr.rss.download.api.model.AlldebridRemoteFile;
 import fr.rss.download.api.service.IAlldebridService;
 import fr.rss.download.api.utils.AllDebridUtils;
-import fr.rss.download.model.AlldebridRemoteFile;
 
 @Service
 public class AlldebridServiceImpl implements IAlldebridService {
@@ -120,7 +120,7 @@ public class AlldebridServiceImpl implements IAlldebridService {
 
 	/**
 	 * Permet de récupérer un lien "allDébridé"
-	 * 
+	 *
 	 * @param alldebridRemoteFile
 	 * @return
 	 * @throws ApiException

@@ -12,3 +12,6 @@ logging.level.org.hibernate=ERROR
 alldebrid.login=myWonder_full_login
 alldebrid.pwd=mYPa$$w0rd
 alldebrid.download.location=C\:\\tmp
+
+#ZT
+zt.tvshow.filename = myTvShowList_test.xml

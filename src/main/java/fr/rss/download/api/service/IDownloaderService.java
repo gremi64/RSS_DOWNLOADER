@@ -1,8 +1,8 @@
 package fr.rss.download.api.service;
 
 import fr.rss.download.api.exceptions.ApiException;
-import fr.rss.download.model.AlldebridRemoteFile;
-import fr.rss.download.model.RemoteFile;
+import fr.rss.download.api.model.AlldebridRemoteFile;
+import fr.rss.download.api.model.RemoteFile;
 
 public interface IDownloaderService {
 

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.rss.download.api.constantes.Const;
 import fr.rss.download.api.exceptions.ApiException;
-import fr.rss.download.model.RemoteFile;
+import fr.rss.download.api.model.RemoteFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.rss.download.api.exceptions.ApiException;
-import fr.rss.download.model.AlldebridRemoteFile;
+import fr.rss.download.api.model.AlldebridRemoteFile;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

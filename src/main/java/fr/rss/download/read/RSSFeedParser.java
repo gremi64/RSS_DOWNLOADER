@@ -19,8 +19,8 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.rss.download.model.Feed;
-import fr.rss.download.model.FeedMessage;
+import fr.rss.download.api.model.zt.fluxrss.Feed;
+import fr.rss.download.api.model.zt.fluxrss.FeedMessage;
 
 public class RSSFeedParser {
 

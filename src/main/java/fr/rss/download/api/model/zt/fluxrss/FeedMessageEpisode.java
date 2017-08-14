@@ -1,4 +1,4 @@
-package fr.rss.download.model;
+package fr.rss.download.api.model.zt.fluxrss;
 
 /*
  * Represents one RSS message

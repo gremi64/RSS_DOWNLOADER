@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.rss.download.api.controller.IAllDebridApiController;
 import fr.rss.download.api.exceptions.ApiException;
+import fr.rss.download.api.model.AlldebridRemoteFile;
 import fr.rss.download.api.service.IAlldebridService;
 import fr.rss.download.api.service.IDownloaderService;
-import fr.rss.download.model.AlldebridRemoteFile;
 import io.swagger.annotations.ApiParam;
 
 @Controller

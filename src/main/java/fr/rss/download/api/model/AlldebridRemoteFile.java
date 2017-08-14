@@ -1,4 +1,4 @@
-package fr.rss.download.model;
+package fr.rss.download.api.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -1,4 +1,4 @@
-package fr.rss.download.model;
+package fr.rss.download.api.model.zt.fluxrss;
 
 import java.util.ArrayList;
 import java.util.List;

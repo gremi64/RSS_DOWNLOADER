@@ -13,5 +13,10 @@
     "name": "alldebrid.download.location",
     "type": "java.lang.String",
     "description": "File download location"
+  },
+  {
+    "name": "zt.tvshow.filename",
+    "type": "java.lang.String",
+    "description": "Permet de choisir le nom du fichier de stockage des liens des series ZT"
   }
 ]}
