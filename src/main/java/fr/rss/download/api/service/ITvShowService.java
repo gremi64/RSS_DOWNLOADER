@@ -4,13 +4,14 @@ import java.util.List;
 
 import fr.rss.download.api.constantes.LANGUE;
 import fr.rss.download.api.constantes.QUALITE;
+import fr.rss.download.api.model.Hebergeur;
 import fr.rss.download.api.model.zt.tvshow.TVShow;
 
 public interface ITvShowService {
 
 	/**
 	 * Initialise le fichier avec les séries contenues dans le code
-	 * 
+	 *
 	 * @return
 	 */
 	List<TVShow> creerSerieFichier();
@@ -41,5 +42,13 @@ public interface ITvShowService {
 	 * @return
 	 */
 	String modifierFichierDestination(String fileName);
+
+	/**
+	 * Renvoie la liste des hebergeurs et de leurs liens
+	 * 
+	 * @param link
+	 * @return
+	 */
+	List<Hebergeur> parseZtTvShowLink(String link);
 
 }

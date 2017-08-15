@@ -29,6 +29,18 @@ public interface IDownloadApiController {
 	@RequestMapping(value = "/download", produces = { "application/json" }, method = RequestMethod.GET)
 	ResponseEntity<?> downloadLink(@ApiParam(value = "Lien à débrider", required = true) @RequestParam("link") String link,
 			@ApiParam(value = "Nom du fichier à télécharger", required = true) @RequestParam("filename") String filename,
-			@ApiParam(value = "Destination du fichier à télécharger", required = false, defaultValue = Const.DEFAULT_VALUE) @RequestParam("destination") String destination) throws ApiException;
+			@ApiParam(value = "Destination du fichier à télécharger", required = false, defaultValue = Const.DEFAULT_VALUE) @RequestParam("destination") String destination)
+					throws ApiException;
+
+	@ApiOperation(value = "Lance le téléchargement d'un lien passé en paramètre", response = RemoteFile.class, tags = { "download" })
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Téléchargement ok", response = RemoteFile.class),
+			@ApiResponse(code = 500, message = "Erreur lors du traitement", response = ApiException.class) })
+
+	@RequestMapping(value = "/downloadTvShow", produces = { "application/json" }, method = RequestMethod.GET)
+	ResponseEntity<?> downloadTvShow(@ApiParam(value = "Nom de la serie TV", required = true) @RequestParam("tvShowName") String tvShowName,
+			@ApiParam(value = "Qualité (HDTV, HD720P, HD1080P)", required = true, defaultValue = "HD720P") @RequestParam("qualite") String qualite,
+			@ApiParam(value = "Langue (VOSTFR, FRENCH, MULTI, ...)", required = true, defaultValue = "VOSTFR") @RequestParam("langue") String langue,
+			@ApiParam(value = "Numero de la saison (1, 2, 3, ...)", required = true) @RequestParam("saison") String saison,
+			@ApiParam(value = "Numero de l'épisode (1, 2, 3, ...)", required = true) @RequestParam("episode") String episode) throws ApiException;
 
 }

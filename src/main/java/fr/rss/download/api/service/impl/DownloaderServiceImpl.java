@@ -40,21 +40,21 @@ public class DownloaderServiceImpl implements IDownloaderService {
 	}
 
 	@Override
-	public void download(AlldebridRemoteFile alldebridRemoteFile) throws ApiException {
-		download(alldebridRemoteFile.getUnrestrainedLink(), alldebridRemoteFile.getFileName());
+	public String download(AlldebridRemoteFile alldebridRemoteFile) throws ApiException {
+		return download(alldebridRemoteFile.getUnrestrainedLink(), alldebridRemoteFile.getFileName());
 	}
 
 	@Override
-	public void download(RemoteFile remoteFile) throws ApiException {
-		download(remoteFile.getLink(), remoteFile.getFileName(), downloadLocation);
+	public String download(RemoteFile remoteFile) throws ApiException {
+		return download(remoteFile.getLink(), remoteFile.getFileName(), downloadLocation);
 	}
 
 	@Override
-	public void download(RemoteFile remoteFile, String location) throws ApiException {
+	public String download(RemoteFile remoteFile, String location) throws ApiException {
 		if (Const.DEFAULT_VALUE.equals(location)) {
-			download(remoteFile);
+			return download(remoteFile);
 		} else {
-			download(remoteFile.getLink(), remoteFile.getFileName(), location);
+			return download(remoteFile.getLink(), remoteFile.getFileName(), location);
 		}
 	}
 
@@ -66,8 +66,8 @@ public class DownloaderServiceImpl implements IDownloaderService {
 	 * @throws ApiException
 	 */
 	@Override
-	public void download(String link, String fileName) throws ApiException {
-		download(link, fileName, downloadLocation);
+	public String download(String link, String fileName) throws ApiException {
+		return download(link, fileName, downloadLocation);
 	}
 
 	/**
@@ -76,16 +76,18 @@ public class DownloaderServiceImpl implements IDownloaderService {
 	 * @param link
 	 * @param fileName
 	 * @param location
+	 * @return
 	 * @throws ApiException
 	 */
 	@Override
-	public void download(String link, String fileName, String location) throws ApiException {
+	public String download(String link, String fileName, String location) throws ApiException {
 		if (link == null) {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Lien null, impossible de lancer le téléchargement");
 		} else if (fileName == null) {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Nom du fichier à télécharger null, impossible de lancer le téléchargement");
 		} else if (location == null) {
-			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Futur emplacement du fichier à télécharger null, impossible de lancer le téléchargement");
+			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Futur emplacement du fichier à télécharger null, impossible de lancer le téléchargement");
 		}
 
 		if (!location.endsWith(SEPARATOR)) {
@@ -96,6 +98,7 @@ public class DownloaderServiceImpl implements IDownloaderService {
 			log.debug("Debut du download : " + location + fileName + " / link=" + link);
 			FileUtils.copyURLToFile(new URL(link), new File(location + fileName));
 			log.debug("Fin du download : " + location + fileName);
+			return location + fileName;
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur lors du téléchargement : UnknownHostException : " + e.getMessage());

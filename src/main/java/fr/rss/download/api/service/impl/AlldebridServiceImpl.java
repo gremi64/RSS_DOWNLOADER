@@ -16,8 +16,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import fr.rss.download.api.exceptions.ApiException;
+import fr.rss.download.api.exceptions.DebridErrorException;
+import fr.rss.download.api.exceptions.FinalLinkNotFoundException;
 import fr.rss.download.api.model.AlldebridRemoteFile;
 import fr.rss.download.api.service.IAlldebridService;
 import fr.rss.download.api.utils.AllDebridUtils;
@@ -37,7 +40,8 @@ public class AlldebridServiceImpl implements IAlldebridService {
 	String mdp;
 	String cookie;
 
-	public AlldebridServiceImpl(@Value("${alldebrid.login}") String login, @Value("${alldebrid.pwd}") String mdp, @Value("${alldebrid.download.location}") String downloadLocation) {
+	public AlldebridServiceImpl(@Value("${alldebrid.login}") String login, @Value("${alldebrid.pwd}") String mdp,
+			@Value("${alldebrid.download.location}") String downloadLocation) {
 		this.login = login;
 		this.mdp = mdp;
 		log.debug("AllDebrid() : login=" + login + " / pwd=" + mdp);
@@ -72,9 +76,10 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		try {
 			ub = new URIBuilder(URL_THE_GREAT_EXTRACTOR);
 		} catch (URISyntaxException e) {
+			log.error("Url du greatExtractor invalide", e);
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Url du greatExtractor invalide : " + e.getMessage());
 		}
-		ub.addParameter("link", link);
+		ub.addParameter("link", link.replaceAll("(\\r|\\n)", ""));
 		ub.addParameter("json", "true");
 		ub.addParameter("jd", "true");
 		String urlDebridage = ub.toString();
@@ -83,13 +88,16 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		try {
 			url = new URL(urlDebridage);
 		} catch (MalformedURLException e) {
+			log.error("Url du greatExtractor avec ses paramètres invalide", e);
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Url du greatExtractor avec ses paramètres invalide : " + e.getMessage());
 		}
 		URLConnection connection;
 		try {
 			connection = url.openConnection();
 		} catch (IOException e) {
-			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Echec de l'uverture Url du greatExtractor avec ses paramètres : " + e.getMessage());
+			log.error("Echec de l'uverture Url du greatExtractor avec ses paramètres", e);
+			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Echec de l'uverture Url du greatExtractor avec ses paramètres : " + e.getMessage());
 		}
 
 		if (cookie == null) {
@@ -105,13 +113,21 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		try {
 			response = IOUtils.toString(connection.getInputStream(), "UTF-8");
 		} catch (IOException e) {
-			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Echec de la lecture de la réponse de l'url du greatExtractor : " + e.getMessage());
+			log.error("Echec de la lecture de la réponse de l'url du greatExtractor", e);
+			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR,
+					"Echec de la lecture de la réponse de l'url du greatExtractor : " + e.getMessage());
 		}
 
-		log.error("URL_THE_GREAT_EXTRACTOR response : " + response);
+		log.debug("URL_THE_GREAT_EXTRACTOR response : {}", response);
 		JSONObject obj = new JSONObject(response);
+		if (!StringUtils.isEmpty(obj.getString("error"))) {
+			log.debug("Erreur retournée par AllDebrid : {}", obj.getString("error"));
+			throw new DebridErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur retournée par AllDebrid : " + "\n" + "response : " + response);
+		}
+
 		if (obj.getJSONArray("finalLinks") == null || obj.getJSONArray("finalLinks").length() < 1) {
-			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Pas de 'FinalLinks' ... " + "\n" + "response : " + response);
+			log.debug("Pas de 'FinalLinks' ... ");
+			throw new FinalLinkNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR, "Pas de 'FinalLinks' ... " + "\n" + "response : " + response);
 		}
 		debridLink = (String) obj.getJSONArray("finalLinks").get(0);
 
@@ -166,8 +182,14 @@ public class AlldebridServiceImpl implements IAlldebridService {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Echec de la lecture de la réponse de l'url de debridage : " + e.getMessage());
 		}
 
-		log.error("URL_UNRESTRAIN response : " + response);
+		log.debug("URL_UNRESTRAIN response : {}", response);
+
 		JSONObject obj = new JSONObject(response);
+		if (!StringUtils.isEmpty(obj.getString("error"))) {
+			log.debug("Erreur retournée par AllDebrid : {}", obj.getString("error"));
+			throw new DebridErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur retournée par AllDebrid : " + "\n" + "response : " + response);
+		}
+
 		alldebridRemoteFile.setFileSize(String.valueOf(obj.getInt("filesize")));
 		alldebridRemoteFile.setFileName(obj.getString("filename"));
 		alldebridRemoteFile.setUnrestrainedLink(obj.getString("link"));

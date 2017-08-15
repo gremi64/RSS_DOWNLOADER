@@ -27,15 +27,16 @@ public class AllDebridApiControllerImpl implements IAllDebridApiController {
 	private IDownloaderService downloaderService;
 
 	@Override
-	public ResponseEntity<?> allDebridDownload(@ApiParam(value = "Lien à débrider", required = true) @RequestParam("link") String link) throws ApiException {
+	public ResponseEntity<?> allDebridDownload(@ApiParam(value = "Lien à débrider", required = true) @RequestParam("link") String link)
+			throws ApiException {
 		AlldebridRemoteFile alldebridRemoteFile = new AlldebridRemoteFile();
-		alldebridRemoteFile.setLink(link);
+		alldebridRemoteFile.setLink(link.replaceAll("(\\r|\\n)", ""));
 
 		log.debug(alldebridService.toString());
 
 		alldebridRemoteFile = alldebridService.unrestrainLink(alldebridRemoteFile);
 
-		downloaderService.download(alldebridRemoteFile);
+		alldebridRemoteFile.setFileLocation(downloaderService.download(alldebridRemoteFile));
 
 		return new ResponseEntity<AlldebridRemoteFile>(alldebridRemoteFile, HttpStatus.OK);
 	}

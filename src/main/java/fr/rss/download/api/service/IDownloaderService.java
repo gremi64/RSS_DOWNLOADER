@@ -8,14 +8,14 @@ public interface IDownloaderService {
 
 	String getDownloadLocation();
 
-	void download(AlldebridRemoteFile alldebridRemoteFile) throws ApiException;
+	String download(AlldebridRemoteFile alldebridRemoteFile) throws ApiException;
 
-	void download(RemoteFile remoteFile) throws ApiException;
+	String download(RemoteFile remoteFile) throws ApiException;
 
-	void download(RemoteFile remoteFile, String location) throws ApiException;
+	String download(RemoteFile remoteFile, String location) throws ApiException;
 
-	void download(String link, String fileName) throws ApiException;
+	String download(String link, String fileName) throws ApiException;
 
-	void download(String link, String fileName, String location) throws ApiException;
+	String download(String link, String fileName, String location) throws ApiException;
 
 }

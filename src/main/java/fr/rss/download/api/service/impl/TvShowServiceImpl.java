@@ -34,13 +34,6 @@ public class TvShowServiceImpl implements ITvShowService {
 	List<TVShow> tvShowList;
 	String tvShowListFile;
 
-	// Exemple d'utilisation pour créer un fichier de liste des séries TV souhaitées
-	//	public static void main(String[] args) {
-	//		TVShowList tvShowList = new TVShowList();
-	//		tvShowList.creerSerieFichier(Const.TV_SHOW_LIST_FILE);
-	//		tvShowList.ajouterSerieFichier("test", QUALITE.HD1080P, LANGUE.FRENCH, "4", "https://test.mysuper.serie.fr/truc-truc-machin.html");
-	//	}
-
 	public TvShowServiceImpl(@Value("${zt.tvshow.filename}") String fileName) {
 		tvShowList = new ArrayList<>();
 		modifierFichierDestination(fileName);
@@ -54,10 +47,11 @@ public class TvShowServiceImpl implements ITvShowService {
 
 	/**
 	 * Parse une page ZT et récupère tous les liens de chaque hébergeur
-	 * 
+	 *
 	 * @param link
 	 * @return
 	 */
+	@Override
 	public List<Hebergeur> parseZtTvShowLink(String link) {
 		List<Hebergeur> listFournisseurs = new ArrayList<>();
 		try {
@@ -81,7 +75,7 @@ public class TvShowServiceImpl implements ITvShowService {
 				} else if (!information.select("a[href]").isEmpty()) {
 					EpisodeHebergeur episode = new EpisodeHebergeur();
 					episode.setName(information.text());
-					episode.setUrl(information.select("a[href]").attr("href"));
+					episode.setUrl(information.select("a[href]").attr("href").replaceAll("(\\r|\\n)", ""));
 					fournisseur.getEpisodes().add(episode);
 				}
 			}

@@ -25,9 +25,6 @@ public class TvShowApiControllerImpl implements ITvShowApiController {
 
 	private static final Logger log = LoggerFactory.getLogger(TvShowApiControllerImpl.class);
 
-	//	@Autowired
-	//	private IDownloaderService downloaderService;
-
 	@Autowired
 	private ITvShowService tvShowService;
 
@@ -47,12 +44,13 @@ public class TvShowApiControllerImpl implements ITvShowApiController {
 			throw new ApiException(HttpStatus.BAD_REQUEST, "Tous les paramètres doivent être renseignés");
 		}
 
-		if (NumberUtils.isCreatable(saison)) {
+		if (!NumberUtils.isCreatable(saison)) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, "La saison doit être un nombre");
 		}
 
-		QUALITE qual = QUALITE.valueOf(qualite);
-		LANGUE lang = LANGUE.valueOf(langue);
+		QUALITE qual = QUALITE.valueOf(qualite.toUpperCase());
+		LANGUE lang = LANGUE.valueOf(langue.toUpperCase());
+		tvShowName = tvShowName.toUpperCase();
 
 		log.debug("Paramètres : Name = {} - Qualite = {} - Langue = {} - Saison = {} - Lien = {}", tvShowName, qual, lang, saison, link);
 
