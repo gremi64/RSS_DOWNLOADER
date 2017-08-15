@@ -10,6 +10,8 @@ public interface IDownloaderService {
 
 	String download(AlldebridRemoteFile alldebridRemoteFile) throws ApiException;
 
+	String download(AlldebridRemoteFile alldebridRemoteFile, String location) throws ApiException;
+
 	String download(RemoteFile remoteFile) throws ApiException;
 
 	String download(RemoteFile remoteFile, String location) throws ApiException;

@@ -18,5 +18,10 @@
     "name": "zt.tvshow.filename",
     "type": "java.lang.String",
     "description": "Permet de choisir le nom du fichier de stockage des liens des series ZT"
+  },
+  {
+    "name": "zt.tvshow.download.location",
+    "type": "java.lang.String",
+    "description": "Tv Show download location'"
   }
 ]}

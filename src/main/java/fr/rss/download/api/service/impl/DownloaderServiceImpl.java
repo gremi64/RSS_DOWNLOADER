@@ -45,6 +45,11 @@ public class DownloaderServiceImpl implements IDownloaderService {
 	}
 
 	@Override
+	public String download(AlldebridRemoteFile alldebridRemoteFile, String location) throws ApiException {
+		return download(alldebridRemoteFile.getUnrestrainedLink(), alldebridRemoteFile.getFileName(), location);
+	}
+
+	@Override
 	public String download(RemoteFile remoteFile) throws ApiException {
 		return download(remoteFile.getLink(), remoteFile.getFileName(), downloadLocation);
 	}

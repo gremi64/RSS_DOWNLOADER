@@ -15,3 +15,4 @@ alldebrid.download.location=C\:\\tmp
 
 #ZT
 zt.tvshow.filename = myTvShowList_test.xml
+zt.tvshow.download.location = C\:\\tmp2

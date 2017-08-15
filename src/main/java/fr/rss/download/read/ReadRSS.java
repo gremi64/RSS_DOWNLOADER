@@ -1,4 +1,4 @@
-package fr.rss.download;
+package fr.rss.download.read;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,10 +8,8 @@ import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.rss.download.api.model.zt.fluxrss.Feed;
 import fr.rss.download.api.model.zt.fluxrss.FeedMessage;
 import fr.rss.download.api.model.zt.fluxrss.FeedMessageEpisode;
-import fr.rss.download.read.RSSFeedParser;
 
 public class ReadRSS {
 
@@ -24,54 +22,54 @@ public class ReadRSS {
 	private static String myLangage = "VOSTFR";
 	// private static String myLangage = "FRENCH";
 
-	public static void main(String[] args) throws Exception {
-
-		listTVShow.add("Game of Thrones");
-		listTVShow.add("In the Dark");
-		listTVShow.add("Snowfall");
-		listTVShow.add("The Fosters");
-		listTVShow.add("Flash (2014)");
-		listTVShow.add("Killjoys");
-		listTVShow.add("Demain nous appartient");
-		listTVShow.add("Will");
-
-		String urlHost = "www.zone-telechargement.ws";
-		String urlRss = "http://" + urlHost + "/telecharger-series/rss.xml";
-
-		RSSFeedParser parser = new RSSFeedParser(urlHost, urlRss);
-		Feed feed = parser.readFeed();
-
-		if (feed == null) {
-			throw new Exception("Feed null, impossible de continuer");
-		}
-
-		log.debug(feed.toString());
-
-		if (feed.getMessages() == null) {
-			throw new Exception("Le feed ne contient aucun message, impossible de continuer");
-		}
-
-		List<FeedMessage> listFeedMessage = new ArrayList<FeedMessage>();
-
-		for (FeedMessage feedMessage : feed.getMessages()) {
-			log.debug(feedMessage.toString());
-			if (isItInMyTVShowList(feedMessage.getTitle())) {
-				listFeedMessage.add(feedMessage);
-			}
-		}
-
-		log.debug("--------------------------------" + "\n" + "-------------TRI----------------" + "\n" + "--------------------------------");
-
-		List<FeedMessageEpisode> listEpisodes = getFullEpisodesOnly(listFeedMessage);
-
-		listEpisodes = getMyLangageAndQuality(listEpisodes);
-
-		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
-			log.debug(feedMessageEpisode.toString());
-			//			TvShowHtmlParser tvShowHtmlParser = new TvShowHtmlParser(feedMessageEpisode.getLink());
-		}
-
-	}
+	//	public static void main(String[] args) throws Exception {
+	//
+	//		listTVShow.add("Game of Thrones");
+	//		listTVShow.add("In the Dark");
+	//		listTVShow.add("Snowfall");
+	//		listTVShow.add("The Fosters");
+	//		listTVShow.add("Flash (2014)");
+	//		listTVShow.add("Killjoys");
+	//		listTVShow.add("Demain nous appartient");
+	//		listTVShow.add("Will");
+	//
+	//		String urlHost = "www.zone-telechargement.ws";
+	//		String urlRss = "http://" + urlHost + "/telecharger-series/rss.xml";
+	//
+	//		RSSFeedParser parser = new RSSFeedParser(urlHost, urlRss);
+	//		Feed feed = parser.readFeed();
+	//
+	//		if (feed == null) {
+	//			throw new Exception("Feed null, impossible de continuer");
+	//		}
+	//
+	//		log.debug(feed.toString());
+	//
+	//		if (feed.getMessages() == null) {
+	//			throw new Exception("Le feed ne contient aucun message, impossible de continuer");
+	//		}
+	//
+	//		List<FeedMessage> listFeedMessage = new ArrayList<FeedMessage>();
+	//
+	//		for (FeedMessage feedMessage : feed.getMessages()) {
+	//			log.debug(feedMessage.toString());
+	//			if (isItInMyTVShowList(feedMessage.getTitle())) {
+	//				listFeedMessage.add(feedMessage);
+	//			}
+	//		}
+	//
+	//		log.debug("--------------------------------" + "\n" + "-------------TRI----------------" + "\n" + "--------------------------------");
+	//
+	//		List<FeedMessageEpisode> listEpisodes = getFullEpisodesOnly(listFeedMessage);
+	//
+	//		listEpisodes = getMyLangageAndQuality(listEpisodes);
+	//
+	//		for (FeedMessageEpisode feedMessageEpisode : listEpisodes) {
+	//			log.debug(feedMessageEpisode.toString());
+	//			//			TvShowHtmlParser tvShowHtmlParser = new TvShowHtmlParser(feedMessageEpisode.getLink());
+	//		}
+	//
+	//	}
 
 	private static List<FeedMessageEpisode> getMyLangageAndQuality(List<FeedMessageEpisode> listEpisodes) {
 		ArrayList<FeedMessageEpisode> myListEpisodes = new ArrayList<FeedMessageEpisode>();

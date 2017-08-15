@@ -40,8 +40,7 @@ public class AlldebridServiceImpl implements IAlldebridService {
 	String mdp;
 	String cookie;
 
-	public AlldebridServiceImpl(@Value("${alldebrid.login}") String login, @Value("${alldebrid.pwd}") String mdp,
-			@Value("${alldebrid.download.location}") String downloadLocation) {
+	public AlldebridServiceImpl(@Value("${alldebrid.login}") String login, @Value("${alldebrid.pwd}") String mdp) {
 		this.login = login;
 		this.mdp = mdp;
 		log.debug("AllDebrid() : login=" + login + " / pwd=" + mdp);
