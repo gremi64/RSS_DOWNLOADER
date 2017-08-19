@@ -72,6 +72,9 @@ public class DownloadApiControllerImpl implements IDownloadApiController {
 			@ApiParam(value = "Numero de la saison (1, 2, 3, ...)", required = true) @RequestParam("saison") String saison,
 			@ApiParam(value = "Numero de l'épisode (1, 2, 3, ...)", required = true) @RequestParam("episode") String episode) throws ApiException {
 
+		log.debug("Paramètres : tvShowName = {} - qualite = {} - langue = {} - saison = {} - episode = {}", tvShowName, qualite, langue, saison,
+				episode);
+
 		// Si un parametre est null : erreur
 		if (StringUtils.isEmpty(tvShowName)
 				|| StringUtils.isEmpty(qualite)
@@ -80,6 +83,12 @@ public class DownloadApiControllerImpl implements IDownloadApiController {
 				|| StringUtils.isEmpty(episode)) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, "Tous les paramètres doivent être renseignés");
 		}
+
+		tvShowName = tvShowName.replace("\"", "");
+		qualite = qualite.replace("\"", "");
+		langue = langue.replace("\"", "");
+		saison = saison.replace("\"", "");
+		episode = episode.replace("\"", "");
 
 		saison = saison.replaceAll("[^\\d]", "");
 		episode = episode.replaceAll("[^\\d]", "");

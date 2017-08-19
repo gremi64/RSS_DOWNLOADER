@@ -43,7 +43,6 @@ public class AlldebridServiceImpl implements IAlldebridService {
 	public AlldebridServiceImpl(@Value("${alldebrid.login}") String login, @Value("${alldebrid.pwd}") String mdp) {
 		this.login = login;
 		this.mdp = mdp;
-		log.debug("AllDebrid() : login=" + login + " / pwd=" + mdp);
 	}
 
 	@Override

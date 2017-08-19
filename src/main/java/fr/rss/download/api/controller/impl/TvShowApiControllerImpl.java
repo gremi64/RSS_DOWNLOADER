@@ -44,6 +44,12 @@ public class TvShowApiControllerImpl implements ITvShowApiController {
 			throw new ApiException(HttpStatus.BAD_REQUEST, "Tous les paramètres doivent être renseignés");
 		}
 
+		tvShowName = tvShowName.replace("\"", "");
+		qualite = qualite.replace("\"", "");
+		langue = langue.replace("\"", "");
+		saison = saison.replace("\"", "");
+		link = link.replace("\"", "");
+
 		if (!NumberUtils.isCreatable(saison)) {
 			throw new ApiException(HttpStatus.BAD_REQUEST, "La saison doit être un nombre");
 		}
