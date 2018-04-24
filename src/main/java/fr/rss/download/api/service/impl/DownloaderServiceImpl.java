@@ -100,9 +100,9 @@ public class DownloaderServiceImpl implements IDownloaderService {
 		}
 
 		try {
-			log.debug("Debut du download : " + location + fileName + " / link=" + link);
+			log.info("Debut du download : " + location + fileName + " / link=" + link);
 			FileUtils.copyURLToFile(new URL(link), new File(location + fileName));
-			log.debug("Fin du download : " + location + fileName);
+			log.info("Fin du download : " + location + fileName);
 			return location + fileName;
 		} catch (UnknownHostException e) {
 			e.printStackTrace();

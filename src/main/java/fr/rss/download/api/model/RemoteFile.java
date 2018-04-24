@@ -11,7 +11,7 @@ public class RemoteFile {
 	String fileName;
 
 	@JsonProperty("file_size")
-	String fileSize;
+	long fileSize;
 
 	@JsonProperty("file_location")
 	String fileLocation;
@@ -32,11 +32,11 @@ public class RemoteFile {
 		this.fileName = fileName;
 	}
 
-	public String getFileSize() {
+	public long getFileSize() {
 		return fileSize;
 	}
 
-	public void setFileSize(String fileSize) {
+	public void setFileSize(long fileSize) {
 		this.fileSize = fileSize;
 	}
 

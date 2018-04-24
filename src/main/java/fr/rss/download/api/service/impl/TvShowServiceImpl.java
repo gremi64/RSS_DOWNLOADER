@@ -31,6 +31,8 @@ public class TvShowServiceImpl implements ITvShowService {
 
 	private static final Logger log = LoggerFactory.getLogger(TvShowServiceImpl.class);
 
+	private static final String ZT_LINK = "https://ww2.zone-telechargement1.com";
+
 	List<TVShow> tvShowList;
 	String tvShowListFile;
 
@@ -104,35 +106,35 @@ public class TvShowServiceImpl implements ITvShowService {
 			String gameOfThrones = "Game of Thrones";
 			tvShow = new TVShow(gameOfThrones, QUALITE.HD720P.name(), LANGUE.VOSTFR.name());
 			tvShow.addTvShowSeason(
-					new TVShowSeason("6", "https://www.zone-telechargement.ws/15860-telecharger-game-of-thrones-saison-6-hd-720p-vostfr.html"));
+					new TVShowSeason("6", ZT_LINK + "/15860-telecharger-game-of-thrones-saison-6-hd-720p-vostfr.html"));
 			tvShow.addTvShowSeason(
-					new TVShowSeason("7", "https://www.zone-telechargement.ws/26987-game-of-thrones-saison-7-vostfr-hd-720p-streaming.html"));
+					new TVShowSeason("7", ZT_LINK + "/26987-game-of-thrones-saison-7-vostfr-hd-720p-streaming.html"));
 			tvShowList.add(tvShow);
 
 			tvShow = new TVShow(gameOfThrones, QUALITE.HDTV.name(), LANGUE.VOSTFR.name());
 			tvShow.addTvShowSeason(
-					new TVShowSeason("6", "https://www.zone-telechargement.ws/15859-game-of-thrones-saison-6-vostfr-hdtv-streaming.html"));
+					new TVShowSeason("6", ZT_LINK + "/15859-game-of-thrones-saison-6-vostfr-hdtv-streaming.html"));
 			tvShow.addTvShowSeason(
-					new TVShowSeason("7", "https://www.zone-telechargement.ws/26988-game-of-thrones-saison-7-vostfr-hdtv-streaming.html"));
+					new TVShowSeason("7", ZT_LINK + "/26988-game-of-thrones-saison-7-vostfr-hdtv-streaming.html"));
 			tvShowList.add(tvShow);
 
 			String fearTheWalkingDead = "Fear The Walking Dead";
 			tvShow = new TVShow(fearTheWalkingDead, QUALITE.HDTV.name(), LANGUE.VOSTFR.name());
-			tvShow.addTvShowSeason(new TVShowSeason("3", "https://www.zone-telechargement.ws/25432-fear-the-walking-dead-saison-3-hdtv-vostfr.html"));
+			tvShow.addTvShowSeason(new TVShowSeason("3", ZT_LINK + "/25432-fear-the-walking-dead-saison-3-hdtv-vostfr.html"));
 			tvShowList.add(tvShow);
 
 			tvShow = new TVShow(fearTheWalkingDead, QUALITE.HDTV.name(), LANGUE.FRENCH.name());
-			tvShow.addTvShowSeason(new TVShowSeason("3", "https://www.zone-telechargement.ws/25619-fear-the-walking-dead-saison-3-hdtv-french.html"));
+			tvShow.addTvShowSeason(new TVShowSeason("3", ZT_LINK + "/25619-fear-the-walking-dead-saison-3-hdtv-french.html"));
 			tvShowList.add(tvShow);
 
 			tvShow = new TVShow(fearTheWalkingDead, QUALITE.HD720P.name(), LANGUE.VOSTFR.name());
 			tvShow.addTvShowSeason(
-					new TVShowSeason("3", "https://www.zone-telechargement.ws/25431-fear-the-walking-dead-saison-3-hd-720p-vostfr.html"));
+					new TVShowSeason("3", ZT_LINK + "/25431-fear-the-walking-dead-saison-3-hd-720p-vostfr.html"));
 			tvShowList.add(tvShow);
 
 			tvShow = new TVShow(fearTheWalkingDead, QUALITE.HD720P.name(), LANGUE.FRENCH.name());
 			tvShow.addTvShowSeason(
-					new TVShowSeason("3", "https://www.zone-telechargement.ws/25615-fear-the-walking-dead-saison-3-hd-720p-french.html"));
+					new TVShowSeason("3", ZT_LINK + "/25615-fear-the-walking-dead-saison-3-hd-720p-french.html"));
 			tvShowList.add(tvShow);
 
 			log.debug(tvShowList.toString());

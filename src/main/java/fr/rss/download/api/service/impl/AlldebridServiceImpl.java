@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import fr.rss.download.api.exceptions.ApiException;
 import fr.rss.download.api.exceptions.DebridErrorException;
@@ -32,13 +31,13 @@ public class AlldebridServiceImpl implements IAlldebridService {
 
 	private static final Logger log = LoggerFactory.getLogger(AlldebridServiceImpl.class);
 
-	static final String URL_CONNEXION = "https://alldebrid.com/api.php";
-	static final String URL_UNRESTRAIN = "https://alldebrid.com/service.php";
-	static final String URL_THE_GREAT_EXTRACTOR = "https://alldebrid.fr/api/theGreatExtractor.php";
+	static final String URL_CONNEXION = "https://api.alldebrid.com/user/login";
+	static final String URL_UNRESTRAIN = "https://api.alldebrid.com/link/unlock";
+	static final String URL_THE_GREAT_EXTRACTOR = "https://api.alldebrid.com/link/redirector";
 
 	String login;
 	String mdp;
-	String cookie;
+	String token;
 
 	public AlldebridServiceImpl(@Value("${alldebrid.login}") String login, @Value("${alldebrid.pwd}") String mdp) {
 		this.login = login;
@@ -57,6 +56,7 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		alldebridRemoteFile = debridLink(alldebridRemoteFile);
 
 		log.debug(alldebridRemoteFile.toString());
+		log.info("Temps de téléchargement estimé : " + alldebridRemoteFile.tempsDl());
 		return alldebridRemoteFile;
 	}
 
@@ -78,8 +78,8 @@ public class AlldebridServiceImpl implements IAlldebridService {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Url du greatExtractor invalide : " + e.getMessage());
 		}
 		ub.addParameter("link", link.replaceAll("(\\r|\\n)", ""));
-		ub.addParameter("json", "true");
-		ub.addParameter("jd", "true");
+		ub.addParameter("token", token);
+		ub.addParameter("agent", USER_AGENT);
 		String urlDebridage = ub.toString();
 
 		URL url;
@@ -98,14 +98,11 @@ public class AlldebridServiceImpl implements IAlldebridService {
 					"Echec de l'uverture Url du greatExtractor avec ses paramètres : " + e.getMessage());
 		}
 
-		if (cookie == null) {
+		if (token == null) {
 			login();
 		}
 
-		connection.setRequestProperty("User-Agent", USER_AGENT);
-		connection.setRequestProperty("Cookie", "uid=" + cookie);
-
-		log.debug("Cookie : " + connection.getRequestProperty("Cookie"));
+		log.debug("url : {}", connection.getURL().toString());
 
 		String response;
 		try {
@@ -118,16 +115,16 @@ public class AlldebridServiceImpl implements IAlldebridService {
 
 		log.debug("URL_THE_GREAT_EXTRACTOR response : {}", response);
 		JSONObject obj = new JSONObject(response);
-		if (!StringUtils.isEmpty(obj.getString("error"))) {
+		if (obj.isNull("success") || obj.getBoolean("success") == false) {
 			log.debug("Erreur retournée par AllDebrid : {}", obj.getString("error"));
 			throw new DebridErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur retournée par AllDebrid : " + "\n" + "response : " + response);
 		}
 
-		if (obj.getJSONArray("finalLinks") == null || obj.getJSONArray("finalLinks").length() < 1) {
+		if (obj.getJSONArray("links") == null || obj.getJSONArray("links").length() < 1) {
 			log.debug("Pas de 'FinalLinks' ... ");
 			throw new FinalLinkNotFoundException(HttpStatus.INTERNAL_SERVER_ERROR, "Pas de 'FinalLinks' ... " + "\n" + "response : " + response);
 		}
-		debridLink = (String) obj.getJSONArray("finalLinks").get(0);
+		debridLink = (String) obj.getJSONArray("links").get(0);
 
 		return debridLink;
 	}
@@ -147,8 +144,8 @@ public class AlldebridServiceImpl implements IAlldebridService {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Url de debridage invalide : " + e.getMessage());
 		}
 		ub.addParameter("link", alldebridRemoteFile.getLink());
-		ub.addParameter("json", "true");
-		ub.addParameter("jd", "true");
+		ub.addParameter("token", token);
+		ub.addParameter("agent", USER_AGENT);
 		String urlDebridage = ub.toString();
 
 		URL url;
@@ -161,17 +158,14 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		try {
 			connection = url.openConnection();
 		} catch (IOException e) {
-			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Echec de l'uverture Url de debridage avec ses paramètres : " + e.getMessage());
+			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Echec de l'ouverture Url de debridage avec ses paramètres : " + e.getMessage());
 		}
 
-		if (cookie == null) {
+		if (token == null) {
 			login();
 		}
 
-		connection.setRequestProperty("User-Agent", USER_AGENT);
-		connection.setRequestProperty("Cookie", "uid=" + cookie);
-
-		log.debug("Cookie : " + connection.getRequestProperty("Cookie"));
+		log.debug("url : {}", connection.getURL().toString());
 
 		String response;
 		try {
@@ -183,14 +177,16 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		log.debug("URL_UNRESTRAIN response : {}", response);
 
 		JSONObject obj = new JSONObject(response);
-		if (!StringUtils.isEmpty(obj.getString("error"))) {
+		if (obj.isNull("success") || obj.getBoolean("success") == false) {
 			log.debug("Erreur retournée par AllDebrid : {}", obj.getString("error"));
 			throw new DebridErrorException(HttpStatus.INTERNAL_SERVER_ERROR, "Erreur retournée par AllDebrid : " + "\n" + "response : " + response);
 		}
 
-		alldebridRemoteFile.setFileSize(String.valueOf(obj.getInt("filesize")));
-		alldebridRemoteFile.setFileName(obj.getString("filename"));
-		alldebridRemoteFile.setUnrestrainedLink(obj.getString("link"));
+		JSONObject infosObj = obj.getJSONObject("infos");
+
+		alldebridRemoteFile.setFileSize(infosObj.getLong("filesize"));
+		alldebridRemoteFile.setFileName(infosObj.getString("filename"));
+		alldebridRemoteFile.setUnrestrainedLink(infosObj.getString("link"));
 
 		return alldebridRemoteFile;
 	}
@@ -205,10 +201,9 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		} catch (URISyntaxException e) {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Url de connexion invalide : " + e.getMessage());
 		}
-		ub.addParameter("action", "info_user");
-		ub.addParameter("login", login);
-		ub.addParameter("pw", mdp);
-		ub.addParameter("format", "json");
+		ub.addParameter("username", login);
+		ub.addParameter("password", mdp);
+		ub.addParameter("agent", USER_AGENT);
 		String urlConnexion = ub.toString();
 
 		URL url;
@@ -224,7 +219,7 @@ public class AlldebridServiceImpl implements IAlldebridService {
 			throw new ApiException(HttpStatus.INTERNAL_SERVER_ERROR, "Echec de l'uverture Url de connexion avec ses paramètres : " + e.getMessage());
 		}
 
-		connection.setRequestProperty("User-Agent", USER_AGENT);
+		log.debug("url : {}", connection.getURL().toString());
 
 		String response;
 		try {
@@ -241,7 +236,8 @@ public class AlldebridServiceImpl implements IAlldebridService {
 		} else {
 			// Login : OK
 			JSONObject obj = new JSONObject(response);
-			cookie = obj.getString("cookie");
+
+			token = obj.getString("token");
 
 			log.info("Login OK");
 		}
@@ -249,7 +245,7 @@ public class AlldebridServiceImpl implements IAlldebridService {
 
 	@Override
 	public String toString() {
-		return "Alldebrid [login=" + login + ", mdp=" + mdp + ", cookie=" + cookie + "]";
+		return "Alldebrid [login=" + login + ", mdp=" + mdp + ", token=" + token + "]";
 	}
 
 }

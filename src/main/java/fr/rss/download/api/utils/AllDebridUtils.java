@@ -18,6 +18,8 @@ public class AllDebridUtils {
 		redirectorsRegexp.add("^(extreme-protect.net/[0-9a-zA-Z.-]+)$");
 		redirectorsRegexp.add("^(ed-protect.org/[0-9a-zA-Z.-]+)$");
 		redirectorsRegexp.add("^(dl-protecte.com/[0-9a-zA-Z.-]+)");
+		redirectorsRegexp.add("^(dl-protect1.com/[0-9a-zA-Z.-]+)");
+		redirectorsRegexp.add("^(dl-protecte.org/[0-9a-zA-Z.-]+)");
 		redirectorsRegexp.add("^(liencaptcha.com/lien.php?idupload=[0-9]+&ad=[0-9]+&pos=[0-9]+&link=[0-9]+)");
 		redirectorsRegexp.add("^(protect.ddl-island.su/[0-9a-zA-Z.-]+)$");
 
