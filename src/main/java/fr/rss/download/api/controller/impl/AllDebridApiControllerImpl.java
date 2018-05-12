@@ -16,7 +16,7 @@ import fr.rss.download.api.service.IAlldebridService;
 import fr.rss.download.api.service.IDownloaderService;
 import io.swagger.annotations.ApiParam;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = { "http://localhost:4200", "http://192.168.1.2:4200" })
 @Controller
 public class AllDebridApiControllerImpl implements IAllDebridApiController {
 

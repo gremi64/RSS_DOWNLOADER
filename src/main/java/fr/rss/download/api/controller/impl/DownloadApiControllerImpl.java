@@ -33,7 +33,7 @@ import fr.rss.download.api.service.IDownloaderService;
 import fr.rss.download.api.service.ITvShowService;
 import io.swagger.annotations.ApiParam;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = { "http://localhost:4200", "http://192.168.1.2:4200" })
 @Controller
 public class DownloadApiControllerImpl implements IDownloadApiController {
 
