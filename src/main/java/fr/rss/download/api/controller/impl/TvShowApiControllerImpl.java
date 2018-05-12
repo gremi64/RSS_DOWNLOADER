@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.rss.download.api.constantes.LANGUE;
@@ -20,6 +21,7 @@ import fr.rss.download.api.model.zt.tvshow.TVShow;
 import fr.rss.download.api.service.ITvShowService;
 import io.swagger.annotations.ApiParam;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 public class TvShowApiControllerImpl implements ITvShowApiController {
 
@@ -31,8 +33,8 @@ public class TvShowApiControllerImpl implements ITvShowApiController {
 	@Override
 	public ResponseEntity<List<TVShow>> addTvShow(
 			@ApiParam(value = "Nom de la serie TV", required = true) @RequestParam("tvShowName") String tvShowName,
-			@ApiParam(value = "Qualité (HDTV, HD720P, HD1080P)", required = true) @RequestParam("qualite") String qualite,
-			@ApiParam(value = "Langue (VOSTFR, FRENCH, MULTI, ...)", required = true) @RequestParam("langue") String langue,
+			@ApiParam(value = "Qualité (HDTV, HD720P, HD1080P)", required = true, defaultValue = "HD720P") @RequestParam("qualite") String qualite,
+			@ApiParam(value = "Langue (VOSTFR, FRENCH, MULTI, ...)", required = true, defaultValue = "VOSTFR") @RequestParam("langue") String langue,
 			@ApiParam(value = "Numero de la saison (1, 2, 3, ...)", required = true) @RequestParam("saison") String saison,
 			@ApiParam(value = "Lien de la page ZT de la saison", required = true) @RequestParam("link") String link) throws ApiException {
 

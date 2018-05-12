@@ -156,23 +156,59 @@ public class TvShowServiceImpl implements ITvShowService {
 	 * Permet d'ajouter une serie avec son lien dans le fichier
 	 *
 	 * @param tvShowName
-	 * @param hd1080p
+	 * @param qualite
 	 * @param langue
 	 * @param seasonNumber
 	 * @param seasonLink
 	 * @return
 	 */
 	@Override
-	public List<TVShow> ajouterSerieFichier(String tvShowName, QUALITE hd1080p, LANGUE langue, String seasonNumber, String seasonLink) {
+	public List<TVShow> ajouterSerieFichier(String tvShowName, QUALITE qualite, LANGUE langue, String seasonNumber, String seasonLink) {
 
+		// MAJ de this.tvShowList
 		recupererTvShowList();
 
 		try {
-			TVShow tvShow = new TVShow();
+			boolean foundInList = false;
+			TVShow newTvShow = new TVShow(tvShowName, qualite.name(), langue.name());
 
-			tvShow = new TVShow(tvShowName, hd1080p.name(), langue.name());
-			tvShow.addTvShowSeason(new TVShowSeason(seasonNumber, seasonLink));
-			tvShowList.add(tvShow);
+			// Est-ce que la série existe déja dans la liste des séries ?
+			for (TVShow tvShow : tvShowList) {
+				// Si on trouve la serie (par rapport a son nom, sa qualite et sa langue)
+				// On quitte la boucle
+				if (tvShowName.replaceAll("\\s", "").equals(tvShow.getName().toUpperCase().replaceAll("\\s", ""))
+						&& qualite.equals(QUALITE.valueOf(tvShow.getQualite().toUpperCase()))
+						&& langue.equals(LANGUE.valueOf(tvShow.getLangue().toUpperCase()))) {
+					newTvShow = tvShow;
+					foundInList = true;
+					log.debug("Serie {} déjà présente dans la liste", tvShowName);
+					break;
+				}
+			}
+
+			// Si c'est déja dans la liste, on vérifie que la saison n'est pas déja présente, si oui, on la supprime (= MAJ au final)
+			if (foundInList) {
+				// Si la saison est déja présente
+				if (newTvShow.getTvShowSeason().stream().anyMatch(ls -> ls.getSaison().equals(seasonNumber))) {
+					for (TVShowSeason tvShowSeason : newTvShow.getTvShowSeason()) {
+						if (tvShowSeason.getSaison().equals(seasonNumber)) {
+							// On supprime la saison si déja existante
+							log.debug("Serie {} : suppression de la saison {}", tvShowName, seasonNumber);
+							newTvShow.getTvShowSeason().remove(tvShowSeason);
+							break;
+						}
+					}
+				}
+			}
+
+			// Ajout de la nouvelle saison
+			log.debug("Serie {} : ajout de la saison {}", tvShowName, seasonNumber);
+			newTvShow.addTvShowSeason(new TVShowSeason(seasonNumber, seasonLink));
+
+			// Si on ne vient pas de la liste, on l'ajoute
+			if (!foundInList) {
+				tvShowList.add(newTvShow);
+			}
 
 			log.debug(tvShowList.toString());
 

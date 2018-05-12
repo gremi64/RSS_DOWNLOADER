@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import fr.rss.download.api.constantes.Const;
@@ -32,6 +33,7 @@ import fr.rss.download.api.service.IDownloaderService;
 import fr.rss.download.api.service.ITvShowService;
 import io.swagger.annotations.ApiParam;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @Controller
 public class DownloadApiControllerImpl implements IDownloadApiController {
 
